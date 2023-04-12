@@ -2,14 +2,19 @@ import React, { useState } from "react";
 
 const SimpleInput = () => {
   const [enteredName, setEnteredName] = useState("");
-  const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
+
+  const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredEmailTouched, setEnteredEmailTouched] = useState(false);
 
   const enteredNameIsValid = enteredName.trim() !== "";
   const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
-  const enteredEmailIsValid = enteredEmail.trim() !== "";
+  const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+  const enteredEmailIsValid =
+    enteredEmail.trim() !== "" && enteredEmail.match(isValidEmail);
+  // Simple Validation
+  // const enteredEmailIsValid = enteredEmail.includes("@");
   const emailInputIsInvalid = !enteredEmailIsValid && enteredEmailTouched;
 
   let formIsValid = false;
@@ -22,15 +27,15 @@ const SimpleInput = () => {
     setEnteredName(event.target.value);
   };
 
-  const nameInputBlurHandler = (event) => {
-    setEnteredNameTouched(true);
-  };
-
   const emailInputChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
   };
 
-  const nameEmailBlurHandler = (event) => {
+  const nameInputBlurHandler = (event) => {
+    setEnteredNameTouched(true);
+  };
+
+  const emailInputBlurHandler = (event) => {
     setEnteredEmailTouched(true);
   };
 
@@ -45,6 +50,7 @@ const SimpleInput = () => {
 
     setEnteredName("");
     setEnteredNameTouched(false);
+
     setEnteredEmail("");
     setEnteredEmailTouched(false);
   };
@@ -73,16 +79,16 @@ const SimpleInput = () => {
         )}
       </div>
       <div className={emailInputClasses}>
-        <label htmlFor="email">Your Email</label>
+        <label htmlFor="email">Your E-mail</label>
         <input
           type="email"
           id="email"
           value={enteredEmail}
           onChange={emailInputChangeHandler}
-          onBlur={nameEmailBlurHandler}
+          onBlur={emailInputBlurHandler}
         />
         {emailInputIsInvalid && (
-          <p className="error-text">Email must not be empty.</p>
+          <p className="error-text">Please enter a valid email.</p>
         )}
       </div>
       <div className="form-actions">
